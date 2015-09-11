@@ -1,35 +1,281 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Unofficial DDE 24h Road stats</title>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"  charset="utf-8"></script> -->
+    <script type="text/javascript" src="d3.js"  charset="utf-8"></script>
+    
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+  <div class="header"></div>
+  <div class="content">
+    <div class="chart"></div>
+    <div class="teamList">
+      <ul id='tableHeader'>
+        <li><span class="color"></span><span class="name">name</span><span class="lap">last lap</span><span class="cps">cps</span></li>
+        <li><span class="color"></span><span class="name">name</span><span class="lap">last lap</span><span class="cps">cps</span></li>
+        <li><span class="color"></span><span class="name">name</span><span class="lap">last lap</span><span class="cps">cps</span></li>
+      </ul>
+      <ul id="teams">
+      </ul>
+    </div>
+  </div>
+  <div class="footer"></div>
+  <script type="text/javascript"> 
+    var raceStartTime = 50400000;
+    
+    //graph size
+    var w = 1000, h = 480;
+    var margin = {top: 30, right: 20, bottom: 30, left: 50},
+        width = w - margin.left - margin.right,
+        height = h - margin.top - margin.bottom;
+    
+    //load teams and names
+    var teams;
+    var teamsLoaded = false;
+    var dataLoaded = false;
+    var data;
+    var timeSortedData;
+    
+    var mouseX = -1,
+        mouseY = -1;
+    d3.csv("teams.csv", function(d) {return {
+        id: +d.ID,
+        team: d.teamName,
+        playerID: +d.playerID,
+        player: d.playerName
+      };}, 
+      function(error, rows) {
+      console.log(rows);
+      console.log(error);
+      if (error) throw error;
+      
+      teams = d3.nest()
+          .key(function(d) {return d.id;})
+          .entries(rows);
+      teamsLoaded = true;
+    });
 
-        "http://www.w3.org/TR/html4/loose.dtd">
+    
+    
+    var x = d3.time.scale()
+        //.domain([0, 24)
+        .range([0, width]),
+        y = d3.scale.linear()
+        //.domain([0,30])
+        .range([height, 0]);
+    var y = d3.time.scale()
+        .range([height,0]);
+        
+    var line = d3.svg.line()
+        .x(function(d) { return x(d.time); })
+        .y(function(d) { return y(d.lastLap); });
+        
+         
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .ticks(22)
+        .tickFormat(d3.time.format("%H:%M"));
 
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+        
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickFormat(d3.time.format("%M:%S"));
+        
+    var svg = d3.select(".chart").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("class", "lines")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          
+    var testData; 
+     
+    function secToRaceTime(s, offset) {
+      //var startTime = 50399999 //15:00
+      return new Date(+s*1000+offset);
+    }
+    
+    function getTeamName(teamID) {
+        try {
+          return teams[teamID].values[0].team; 
+        }
+        catch(e){
+          console.log(e);
+        } 
+        return "unknown";
+    }
+    function getPlayerName(teamID, playerID) {
+        try {
+          return teams[teamID].values[playerID].player; 
+        }
+        catch(e){
+          console.log(e);
+        } 
+        return "unknown";
+    }
 
-
-        <html lang="en">
-
-
-
-        <head>
-
-
-
-          <meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-            <title>DDE 24H Road unofficial stats</title>
-
-
-
-            </head>
-
-
-
-            <body>
-
-            <p>Work in Progress!</p>
-
-
-
-            </body>
-
-
-
-            </html>
+          
+    //d3.csv("generatedData.csv")
+    
+    d3.csv("generatedData.csv", function(d) {
+      return {
+        //time, session, teamID, playerID, rank, lastLap, cpsTotal, cpsChange
+        time: secToRaceTime(d.time, raceStartTime),
+        session: +d.session,
+        teamID: +d.teamID,
+        playerID: +d.playerID,
+        rank: +d.rank,
+        lastLap: secToRaceTime(d.lastLap, 0),
+        cps: +d.cpsTotal,
+        cpsChange: +d.cpsChange
+    };
+    }, function(error, rows) {
+      console.log(error);
+      if (error) throw error;
+      
+      data = rows;
+      dataLoaded = true;
+      //do stuff to draw lines
+      //drawStuff()
+      drawGraph();
+      updateTeamTable(0);
+    });
+    
+    function handleMouseMovement(mouse) { //TODO display time text, display 
+        mouseY = mouse[1]-margin.top;
+        mouseX = mouse[0]-margin.left;
+        //if inside lines part
+        if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+            d3.select("g.mouseIndicator").select("line")
+            .attr("class", "active")
+            .attr("x1", mouse[0])
+            .attr("x2", mouse[0]);
+            
+            var relX = mouseX/width;
+            //console.log(relX);
+            updateTeamTable(relX);
+            
+        } else { //must be round edges, disable indicator
+            d3.select("g.mouseIndicator").select("line")
+            .attr("class", "inactive");
+        }
+    
+    }
+    
+    function drawGraph() {
+      if (dataLoaded = true) {
+      
+        x.domain(d3.extent(data, function(d) { return d.time; }));
+        y.domain(d3.extent(data, function(d) { return d.lastLap; }));
+        
+        
+        testData = d3.nest()
+            .key(function(d) { return d.teamID; })
+            .entries(data);
+            
+        timeSortedData = d3.nest()
+          .key(function(d){return d.time; })
+          .entries(data);
+        
+  //      svg.append("path")
+  //          .datum(data)
+  //          .attr("class", "line")
+  //          .attr("d", line);
+          d3.select("svg").select("g.lines").selectAll("path")
+              .data(testData)
+              .enter().append("path")
+              .attr("class", "line")
+              .style("stroke", d3.rgb(200,0,0))
+              .on('mouseover', function(d, i) {	console.log(d); console.log(i); console.log(d3.event); console.log(d3.mouse(d3.select("path").node()));	})
+              .attr("d", function(d){return line(d.values);});
+          
+          d3.select("svg")
+              .on('mousemove', function(d,i) { handleMouseMovement(d3.mouse(d3.select("svg").node())); });
+          
+        d3.select("svg").append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate("+ margin.left + ", " + (height+margin.top) + ")")
+            .call(xAxis);
+            
+        d3.select("svg").append("g")
+            .attr("class", "mouseIndicator")
+            .append("line")
+            .attr("class", "inactive")
+            .attr("y1", ""+margin.top)
+            .attr("y2", (height+margin.top)+"");
+            
+        d3.select("svg").append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate("+ margin.left +", " + margin.top + ")")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "-2.7em")
+        .style("text-anchor", "end")
+        .text("last lap");
+        
+        d3.select("svg").append("g")
+          .attr("class", "timeField")
+          .append("text")
+          .attr("x", (width+margin.left)+"")
+          .attr("y", 20);
+      }
+    }
+    
+    function updateTeamTable(timeValue) {
+      if (timeValue == -1) {
+        return;
+      }
+      
+      if (teamsLoaded && dataLoaded) {
+        selectedTime = Math.floor((timeSortedData.length-1) * timeValue)
+        //console.log(selectedTime);
+        
+        teamData = d3.nest()
+            .key(function(d) { return d.teamID;})
+            .entries(timeSortedData[selectedTime].values)
+        
+        var lapTimeFormat = d3.time.format("%M:%S.%L");
+        liElement = d3.select(".teamList").select("ul#teams").selectAll("li.driver");
+        if (liElement[0].length == 0) {
+            console.log("niks");
+            liElement.data(teamData)
+          .enter().append("li")
+          .attr("class", "driver")
+          .html(function(d) { row = d.values[0]; 
+            return "<span class=\"color\">" +
+            "</span><span class=\"name\">" + getPlayerName(row.teamID, row.playerID) +
+            "</span><span class=\"lap\">" + lapTimeFormat(row.lastLap)+ 
+            "</span><span class=\"cps\">" + row.cps+ "</span>";});
+        }
+        else {
+            liElement.data(teamData)
+          .attr("class", "driver")
+          .call(function(c) { c
+              .html(function(d) { row = d.values[0]; 
+                return "<span class=\"color\">" +
+                "</span><span class=\"name\">" + getPlayerName(row.teamID, row.playerID) +
+                "</span><span class=\"lap\">" + lapTimeFormat(row.lastLap)+ 
+                "</span><span class=\"cps\">" + row.cps+ "</span>";})});
+        }
+        
+        //also change time at top of svg
+        var generalTimeFormat = d3.time.format("%H:%M:%S");
+        d3.select("g.timeField").select("text")
+            .html(function(d) { return generalTimeFormat(timeSortedData[selectedTime].values[0].time);});
+        
+      }
+    }
+    
+  </script>
+  </body>
+</html>
