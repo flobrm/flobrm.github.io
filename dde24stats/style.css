@@ -1,0 +1,82 @@
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+div.content {
+  width:1050px
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.tick {
+  font-size: .6em;
+}
+
+g.mouseIndicator line.active {
+  stroke: #bbb;
+  shape-rendering: crispEdges;
+}
+
+g.mouseIndicator line.inactive {
+  display: none;
+}
+
+g.timeField text {
+  text-anchor: end;
+  font-size: 10pt
+}
+
+.teamList {
+  
+}
+
+.teamList ul {
+  font-size: 10pt;
+  list-style: none;
+  padding-left: 1em;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  
+  -webkit-column-count: 3; /* Chrome, Safari, Opera */
+  -moz-column-count: 3; /* Firefox */
+  column-count: 3;
+}
+.teamList ul li span {
+  display:inline-block;
+}
+
+.teamList ul li span.color {
+  width:1em;
+  min-width: 1em;
+  min-height: 8pt;
+  margin-right:.2em;
+  background-color: red;
+  
+}
+.teamList ul li span.name {
+  width: 14em;
+}
+.teamList ul li span.lap {
+  width: 6em;
+}
+.teamList ul li span.cps {
+  width: 3.5em;
+}
+
+
