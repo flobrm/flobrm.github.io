@@ -1,3 +1,36 @@
+body {
+  background-color: #928E8E;
+  margin: 0;
+}
+
+div.content {
+  margin: auto;
+  margin-left:150px;
+  width:1080px;
+  padding-bottom: 200px;
+  background-color: #DAD8D8;
+  margin-top: 0;
+  padding-top:0;
+  border-radius:10px;
+}
+
+.header {
+  height:120px;
+}
+
+.header h1 {
+  //margin: auto;
+  margin-top: 0;
+  padding-top:30px;
+  text-align: center;
+  font-family: Verdana; 
+  font-size:20pt; 
+  font-weight:bold; 
+  color:#ac2020; 
+  text-shadow: 1px 1px 1px black
+  
+}
+
 .chart div {
   font: 10px sans-serif;
   background-color: steelblue;
@@ -5,11 +38,21 @@
   padding: 3px;
   margin: 1px;
   color: white;
+  
 }
 
-div.content {
-  width:1050px
+.chart {
+  align-content: center;
+   //#DAD8D8;
 }
+svg {
+  display:block;
+  margin: auto;
+  margin-bottom:15px;
+  padding: 10px;
+  background-color: whitesmoke;
+}
+
 
 .line {
   fill: none;
@@ -63,7 +106,12 @@ g.timeField text {
   
 }
 
+#tableHeader {
+  font-weight: bold;
+}
+
 .teamList ul {
+  font-family: verdana;
   font-size: 10pt;
   list-style: none;
   padding-left: 1em;
@@ -73,29 +121,56 @@ g.timeField text {
   -webkit-column-count: 3; /* Chrome, Safari, Opera */
   -moz-column-count: 3; /* Firefox */
   column-count: 3;
+  	-webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+    -moz-column-rule-style: solid; /* Firefox */
+    column-rule-style: solid;
+  -webkit-column-rule-width: 1px; /* Chrome, Safari, Opera */
+    -moz-column-rule-width: 1px; /* Firefox */
+    column-rule-width: 1px;
 }
+
 .teamList ul li span {
   display:inline-block;
   font-size: 9pt;
 }
 
 .teamList ul li span.color {
-  width:1em;
+  width:1rem;
   min-width: 1em;
-  min-height: 8pt;
-  margin-right:.2em;
-  background-color: red;
-  
+  min-height: 6pt;
+  margin-right:.2rem;
 }
+
 .teamList ul li span.name {
-  width: 19em;
+  width: 14rem;
+}
+.teamList ul#teams li span {
   font-size: 8pt;
 }
+
 .teamList ul li span.lap {
-  width: 6em;
+  width: 4rem;
 }
 .teamList ul li span.cps {
-  width: 3.5em;
+  width: 2rem;
 }
 
 
+
+a:link {
+  text-decoration: none;
+  display: block;
+  color: #000;
+}
+.features-table {
+  font: 14px Verdana,Arial,Helvetica;
+}
+
+.features-table th {
+  
+    height: 25px;
+    box-shadow: 1px 1px 4px #000;
+    background: #AC2020 none repeat scroll 0% 0%;
+    padding: 0px;
+  border-radius:10px;
+}
