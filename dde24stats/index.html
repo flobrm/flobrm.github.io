@@ -229,7 +229,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
     
     function drawGraph() {
       if (dataLoaded = true) {
-        d3.select("svg").html(function() {return});
+        d3.select("svg").html(function() {return ""});
         
         d3.select("svg").append("defs").append("clipPath")
         .attr("id", "drawingArea")
@@ -265,7 +265,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         d3.select("svg").append("g")
           .attr("class", "lines")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-          .attr("clip-path", "url(#drawingArea)");
+          .style("clip-path", "url(#drawingArea)");
         
   //      svg.append("path")
   //          .datum(data)
