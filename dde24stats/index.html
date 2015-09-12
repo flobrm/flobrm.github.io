@@ -116,7 +116,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         RANK:     {desc:"rank",      index:0, yLabel:"rank", yAxis: yRankAxis, y:yInversed, dataFunc:function(d){ return d.rank}},
         LASTLAP:  {desc: "last lap", index:1, yLabel:"time", yAxis: yTimeAxis, y:yTime, dataFunc:function(d){ return d.lastLap}}, 
         CPSTOTAL: {desc: "total CPs",index:2, yLabel:"CPs", yAxis: yCPAxis, y:yNormal, dataFunc:function(d){ return d.cps}},
-        CPSCHANGE:{desc: "new CPs",  index:3, yLabel:"new CPs in last minutes", yAxis: yCPAxis, y:yNormal, dataFunc:function(d){ return d.cpsChange}},
+        CPSCHANGE:{desc: "new CPs",  index:3, yLabel:"new CPs in last 2 minutes", yAxis: yCPAxis, y:yNormal, dataFunc:function(d){ return d.cpsChange}},
     }
     graphType = "RANK";
     
