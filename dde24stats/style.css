@@ -43,13 +43,18 @@ div.content {
 
 .chart {
   align-content: center;
-   //#DAD8D8;
+  padding: 10px;
+  padding-bottom: 1px;
+  margin-left: 30px;
+  margin-right:30px;
+  margin-bottom:15px;
+  background-color: whitesmoke;
 }
+
 svg {
   display:block;
   margin: auto;
   margin-bottom:15px;
-  padding: 10px;
   background-color: whitesmoke;
 }
 

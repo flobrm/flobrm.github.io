@@ -251,7 +251,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
             y.domain([0, d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })+1]);
         }
         else if (graphType == "LASTLAP") {
-            y.domain([secToRaceTime(180,0),d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })]);
+            y.domain([secToRaceTime(235,0),d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })]);
         }
         
         d3.select("svg").append("g")
