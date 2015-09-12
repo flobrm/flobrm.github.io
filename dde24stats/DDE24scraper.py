@@ -215,7 +215,7 @@ def buildSiteStats(scrapeTime, prevStats, stats, sessionDict):
             prevPlayerID = getPlayerID(prevRecord[4], team, prevStats[0])
             prevPlayerCPDiff = teamRecord[prevPlayerID][1] - prevTeamRecord[prevPlayerID][1]
             
-            previousPlayerLine = [scrapeTime, session, getTeamID(team, stats[0].keys()), prevPlayerID, prevRecord[0], prevRecord[-2], prevRecord[2], prevPlayerCPDiff]
+            previousPlayerLine = [scrapeTime, session, getTeamID(team, stats[0].keys()), prevPlayerID, prevRecord[0], prevRecord[-2], prevRecord[2], max(prevPlayerCPDiff, 0)]
             data.append(previousPlayerLine)
             session += 1
             sessionDict[team] = session

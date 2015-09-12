@@ -98,8 +98,11 @@ g.graphButtons .active{
 g.timeField text {
   fill:grey;
   text-anchor: end;
-  font-size: 10pt
-  background-color: red;
+}
+
+g.mouseInfo text {
+  fill:grey;
+  font-size: 10pt;
 }
 
 .teamList {

@@ -78,8 +78,8 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
     
     var getColor = function(d)  {return colors[d.teamID];}
     //graph size
-    var w = 1000, h = 480;
-    var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    var w = 1000, h = 550;
+    var margin = {top: 30, right: 20, bottom: 40, left: 50},
         width = w - margin.left - margin.right,
         height = h - margin.top - margin.bottom;
     
@@ -161,7 +161,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         }
         catch(e){
         } 
-        return "unknown";
+        return "--";
     }
     
     d3.csv("dde24sitedata.csv", function(d) {
@@ -208,6 +208,25 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         }
     }
     
+    function updateMouseoverText(records, index, mouse) {
+        //console.log(records);
+        //console.log(index);
+        //console.log(mouse);
+        teamID = records.values[0].teamID;
+        playerID = records.values[0].playerID;
+        team = teams[index]
+        
+        txt = team.values[0].team + "\t\t\t\t\t\t\t" + getPlayerName(teamID, playerID);
+        
+        d3.select("svg").select("g.mouseInfo").select("text")
+          .text(txt);
+    }
+    
+    function setMouseoverText(sometext) {
+        d3.select("svg").select("g.mouseInfo").select("text")
+          .text(sometext);
+    }
+    
     function drawGraph() {
       if (dataLoaded = true) {
         d3.select("svg").html(function() {return});
@@ -232,11 +251,8 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
             y.domain([0, d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })+1]);
         }
         else if (graphType == "LASTLAP") {
-            //y.domain([secToRaceTime(210, 0), d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })+1]);
             y.domain([secToRaceTime(180,0),d3.max(data, function(d) { return GRAPHTYPE[graphType].dataFunc(d); })]);
         }
-        
-        
         
         d3.select("svg").append("g")
           .attr("class", "lines")
@@ -250,8 +266,9 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
               .data(testData)
               .enter().append("path")
               .attr("class", "line")
-              .style("stroke", function(d) { console.log(d); return getColor(d.values[0]);})
-              //.on('mouseover', function(d, i) {	console.log(d); console.log(i); console.log(d3.event); console.log(d3.mouse(d3.select("path").node()));	})
+              .style("stroke", function(d) { return getColor(d.values[0]);})
+              .on('mouseover', function(d, i) {	updateMouseoverText(d, i, d3.mouse(d3.select("path").node())); })
+              //console.log(d); console.log(i); console.log(d3.event); console.log(d3.mouse(d3.select("path").node())); console.log("\n");})
               .attr("d", function(d){return line(d.values);}); 
           
           d3.select("svg")
@@ -288,6 +305,13 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
           .append("text")
           .attr("x", (width+margin.left)+"")
           .attr("y", 20);
+          
+        //bottom mouseOver
+        d3.select("svg").append("g")
+            .attr("transform", "translate("+ (margin.left+width) +", " + (margin.top+height+35) + ")")
+            .attr("class", "mouseInfo")
+          .append("text")
+            .style("text-anchor", "end")
       }
     }
     
