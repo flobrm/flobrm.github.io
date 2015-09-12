@@ -241,7 +241,7 @@ def writeSiteData(filename, entries):
     f.write(s)
   f.close()
   
-def runScrapeLoop(duration=1440, interval=60):
+def runScrapeLoop(duration=14400, interval=120):
   print("Running for {0} minutes with an interval of {1} seconds".format(duration, interval))
   startTime = time.time()
   prevStats = 0
