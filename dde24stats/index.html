@@ -237,7 +237,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
     
     function drawGraph() {
       if (dataLoaded = true) {
-        var imgRoot = d3.select("svg:svg").node();
+        var imgRoot = d3.select("svg").node();
         for (var i = imgRoot.childNodes.length-1; i >= 0; i--) {
             if (imgRoot.childNodes[i].tagName != "defs"||true) {
                 imgRoot.removeChild(imgRoot.childNodes[i]);
