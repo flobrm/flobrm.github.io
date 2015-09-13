@@ -145,7 +145,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
       teamsLoaded = true;
     });
         
-    var svg = d3.select(".chart").append("svg")
+    var svg = d3.select(".chart").append("svg:svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom);
           
@@ -237,7 +237,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
     
     function drawGraph() {
       if (dataLoaded = true) {
-        var imgRoot = d3.select("svg").node();
+        var imgRoot = d3.select("svg:svg").node();
         for (var i = imgRoot.childNodes.length-1; i >= 0; i--) {
             if (imgRoot.childNodes[i].tagName != "defs"||true) {
                 imgRoot.removeChild(imgRoot.childNodes[i]);
@@ -246,7 +246,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         
         d3.select("svg").append("defs").append("svg:clipPath")
             .attr("id", "drawingArea")
-          .append("rect")
+          .append("svg:rect")
             .attr("x","0")
             .attr("y","0")
             .attr("width", width+"")
