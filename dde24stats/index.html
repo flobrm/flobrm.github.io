@@ -20,13 +20,13 @@
         <a href="http://www.uselesspride.com/" target="_blank"><img src="img/uselessprideMERCH.png" alt="html5" style="position:fixed; top:635px; left:15px; width:99px; height:120px; border:none;" /></a>
     </div>
     <div class="chart">
-        <svg width="1000" height="550">
+     <!--   <svg width="1000" height="550">
             <defs>
                 <clipPath id="drawingArea">
                 <rect x="0" y="0" width="930" height="480"></rect>
                 </clipPath>
             </defs>
-        </svg>
+        </svg> -->
     </div>
     <div class="teamList">
       <ul id='tableHeader'>
@@ -145,9 +145,9 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
       teamsLoaded = true;
     });
         
-    //var svg = d3.select(".chart").append("svg")
-    //      .attr("width", width + margin.left + margin.right)
-    //      .attr("height", height + margin.top + margin.bottom);
+    var svg = d3.select(".chart").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom);
           
     var testData; 
      
@@ -239,13 +239,18 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
       if (dataLoaded = true) {
         var imgRoot = d3.select("svg").node();
         for (var i = imgRoot.childNodes.length-1; i >= 0; i--) {
-            if (imgRoot.childNodes[i].tagName != "defs") {
+            if (imgRoot.childNodes[i].tagName != "defs"||true) {
                 imgRoot.removeChild(imgRoot.childNodes[i]);
             }
         }
-       // for (var i = 1; imgRoot.childNodes.length > 1; i++) {
-       //     imgRoot.removeChild(imgRoot.childNodes[1]);
-       // }
+        
+        d3.select("svg").append("defs").append("svg:clipPath")
+            .attr("id", "drawingArea")
+          .append("rect")
+            .attr("x","0")
+            .attr("y","0")
+            .attr("width", width+"")
+            .attr("height", height+"")
         
         testData = d3.nest()
             .key(function(d) { return d.teamID; })
