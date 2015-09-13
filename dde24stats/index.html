@@ -197,8 +197,8 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
     });
     
     function handleMouseMovement(mouse) { //TODO display time text, display 
-        mouseY = mouse[1]-margin.top;
-        mouseX = mouse[0]-margin.left;
+        var mouseY = mouse[1]-margin.top;
+        var mouseX = mouse[0]-margin.left;
         //if inside lines part
         if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
             d3.select("g.mouseIndicator").select("line")
@@ -220,11 +220,11 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         //console.log(records);
         //console.log(index);
         //console.log(mouse);
-        teamID = records.values[0].teamID;
-        playerID = records.values[0].playerID;
-        team = teams[index]
+        var teamID = records.values[0].teamID;
+        var playerID = records.values[0].playerID;
+        var team = teams[index]
         
-        txt = team.values[0].team + "\t\t\t\t\t\t\t" + getPlayerName(teamID, playerID);
+        var txt = team.values[0].team + "\t\t\t\t\t\t\t" + getPlayerName(teamID, playerID);
         
         d3.select("svg").select("g.mouseInfo").select("text")
           .text(txt);
@@ -324,9 +324,9 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         
         d3.select("svg").append("g")
           .attr("class", "timeField")
+          .attr("transform", "translate("+ (width+margin.left) +", " + 20 + ")")
           .append("text")
-          .attr("x", (width+margin.left)+"")
-          .attr("y", 20);
+          .style("text-anchor", "end")
           
         //bottom mouseOver
         d3.select("svg").append("g")
@@ -362,7 +362,7 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         .attr("transform", "translate(" + margin.left+",20)");
       
       for (i in GRAPHTYPE) {
-        button = buttonGroup.append("text")
+        var button = buttonGroup.append("text")
           .attr("class", "inactive")
           .attr("x", totalOffset + "")
           .text(GRAPHTYPE[i].desc)
@@ -382,15 +382,15 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
       }
       
       if (teamsLoaded && dataLoaded) {
-        selectedTime = Math.floor((timeSortedData.length-1) * timeValue)
+        var selectedTime = Math.floor((timeSortedData.length-1) * timeValue)
         //console.log(selectedTime);
         
-        teamData = d3.nest()
+        var teamData = d3.nest()
             .key(function(d) { return d.teamID;})
             .entries(timeSortedData[selectedTime].values)
         
         var lapTimeFormat = d3.time.format("%M:%S.%L");
-        liElement = d3.select(".teamList").select("ul#teams").selectAll("li.driver");
+        var liElement = d3.select(".teamList").select("ul#teams").selectAll("li.driver");
         if (liElement[0].length == 0) {
             liElement.data(teamData)
           .enter().append("li")
@@ -417,7 +417,8 @@ d3.rgb(221,86,238),d3.rgb(95,234,82),d3.rgb(93,161,72),d3.rgb(207,121,36)];
         //also change time at top of svg
         var generalTimeFormat = d3.time.format("%H:%M:%S");
         d3.select("g.timeField").select("text")
-            .html(function(d) { return generalTimeFormat(timeSortedData[selectedTime].values[0].time);});
+            //.html(function(d) { return generalTimeFormat(timeSortedData[selectedTime].values[0].time);});
+            .text(generalTimeFormat(timeSortedData[selectedTime].values[0].time));
       }
     }
     
